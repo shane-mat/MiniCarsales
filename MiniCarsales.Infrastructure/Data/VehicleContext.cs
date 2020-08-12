@@ -20,9 +20,7 @@ namespace MiniCarsales.Infrastructure.Data
         {
             builder.Entity<Vehicle>()
                 .HasDiscriminator(b => b.VehicleType);
-
                   base.OnModelCreating(builder);
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

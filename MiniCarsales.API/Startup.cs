@@ -44,9 +44,8 @@ namespace MiniCarsales.API
             });
 
             services.AddControllers();
-            services.AddDbContext<VehicleContext>(op =>{
-                op.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
+             services.AddDbContext<VehicleContext>(op =>
+                op.UseInMemoryDatabase(databaseName: "Vehicles"));
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 

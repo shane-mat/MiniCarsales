@@ -16,23 +16,7 @@ namespace MiniCarsales.API
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            using(var scope = host.Services.CreateScope())
-            {
-                var svc = scope.ServiceProvider;
-                try
-                {
-                    var ctx = svc.GetRequiredService<VehicleContext>();
-                    ctx.Database.Migrate();
-                }
-                catch(Exception ex)
-                {
-                    var logger = svc.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex.Message);
-                }
-            }
-
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

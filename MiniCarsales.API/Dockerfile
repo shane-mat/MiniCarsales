@@ -16,5 +16,5 @@ RUN dotnet publish "MiniCarsales.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "MiniCarsales.API.dll"]
