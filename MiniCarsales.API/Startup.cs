@@ -18,6 +18,8 @@ using MiniCarsales.API.Application.Common.Commands;
 using System.Reflection;
 using MiniCarsales.API.Application.Cars.Commands;
 using MiniCarsales.API.Middlewares;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace MiniCarsales.API
 {
@@ -33,19 +35,24 @@ namespace MiniCarsales.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddCors(opt =>
+            services.AddCors(opt =>
+           {
+               opt.AddPolicy("Corspolicy", policy =>
+               {
+                   policy.AllowAnyHeader()
+                         .AllowAnyMethod()
+                         .AllowAnyOrigin();
+               });
+           });
+
+            services.AddSwaggerGen(c =>
             {
-                opt.AddPolicy("Corspolicy", policy =>
-                {
-                    policy.AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowAnyOrigin();
-                });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
 
             services.AddControllers();
-             services.AddDbContext<VehicleContext>(op =>
-                op.UseInMemoryDatabase(databaseName: "Vehicles"));
+            services.AddDbContext<VehicleContext>(op =>
+               op.UseInMemoryDatabase(databaseName: "Vehicles"));
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
@@ -66,7 +73,12 @@ namespace MiniCarsales.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "");
+            });
 
             app.UseRouting();
 
